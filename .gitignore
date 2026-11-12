@@ -1,0 +1,33 @@
+# Python Bytecode & Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.env
+venv/
+dermacare_env/
+env/
+
+# Large Datasets & Raw Images (Do NOT commit to Git - exceeds 100MB)
+medical_datasets/
+isic2018_raw/
+processed_isic/
+multicare_melasma/
+rois_output/
+*.parquet
+*.zip
+*.tar.gz
+*.tar
+
+# Model Weights & Training Checkpoints (Tải theo link trong weights/README.md)
+weights/*.pt
+weights/*.bin
+segformer_melasma_checkpoint/
+pipeline_demo_output/
+predictions_rois.json
+
+# IDE, OS, and Temporary Files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.bak
