@@ -1,7 +1,8 @@
 # Hướng dẫn cài đặt môi trường (chạy trên GPU riêng)
 
-Tài liệu này hướng dẫn cài đặt để chạy toàn bộ pipeline Hướng 1 (YOLO ROI Detection
-+ SegFormer Segmentation + MASI) trên máy có GPU NVIDIA riêng của bạn.
+Tài liệu này giải thích chi tiết cách chuẩn bị GPU NVIDIA và môi trường PyTorch CUDA để
+chạy pipeline (YOLO ROI Detection + SegFormer Segmentation + MASI). Hướng dẫn cài đặt
+ngắn gọn nằm trong `README.md` ở thư mục gốc; đọc tài liệu này khi gặp lỗi GPU/CUDA.
 
 ---
 
@@ -59,6 +60,9 @@ về sau:
 python -c "import torch; print('GPU khả dụng:', torch.cuda.is_available()); print('Tên GPU:', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'Không tìm thấy')"
 ```
 
+> Lưu ý: GPU đời cũ (ví dụ dòng GTX 10xx) có thể không được hỗ trợ bởi các bản PyTorch CUDA mới nhất.
+> Nếu bản mới báo lỗi hoặc không nhận GPU, dùng bản `cu121` ở lệnh trên.
+
 Nếu dòng "GPU khả dụng" in ra `False`, dừng lại — đừng cài tiếp các bước sau, vì
 bản PyTorch bạn cài là bản CPU (rất chậm khi huấn luyện). Quay lại chọn đúng lệnh
 theo phiên bản CUDA ở pytorch.org.
@@ -67,8 +71,10 @@ theo phiên bản CUDA ở pytorch.org.
 
 ## Bước 4 — Cài các thư viện còn lại
 
+Chạy từ thư mục gốc của project (thư mục chứa `requirements.txt`):
+
 ```bash
-cd dermacare_pipeline
+cd DermaCare_AI
 pip install -r requirements.txt
 ```
 

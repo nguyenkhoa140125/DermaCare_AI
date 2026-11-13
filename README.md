@@ -4,7 +4,7 @@
 > **Sinh viên thực hiện:** Nguyễn Văn Khoa — MSSV: 23DH114394 — Lớp: PM2305
 > **Giảng viên hướng dẫn:** ThS. Phan Thị Ngọc Hân (HUFLIT)
 
-> ⚠️ **Lưu ý quan trọng:** Repo **không kèm checkpoint SegFormer đã huấn luyện**. Bạn cần tự tải dữ liệu và huấn luyện mô hình (mục 6) trước khi chạy demo (mục 7). Cần khoảng **15–20GB** ổ cứng trống, thời gian huấn luyện từ **30 phút đến vài giờ** tùy GPU.
+> ⚠️ **Lưu ý quan trọng:** Repo **không kèm checkpoint SegFormer đã huấn luyện**. Bạn cần tự tải dữ liệu và huấn luyện mô hình (mục 6) trước khi chạy demo (mục 7); nếu bỏ qua, demo vẫn chạy nhưng cho kết quả không có giá trị. Cần khoảng **15–20GB** ổ cứng trống, thời gian huấn luyện từ **30 phút đến vài giờ** tùy GPU.
 
 ---
 
@@ -220,11 +220,27 @@ python scripts/07_stage3_masi.py
 
 ## 7. Chạy demo
 
-Chỉ chạy được **sau khi hoàn thành Giai đoạn C** (đã có checkpoint SegFormer).
+Chỉ chạy **sau khi hoàn thành Giai đoạn C**. Script 08 đọc checkpoint tại `segformer_melasma_checkpoint/best_model`. Kiểm tra checkpoint đã tồn tại:
+
+**Windows (PowerShell):**
+
+```powershell
+Test-Path segformer_melasma_checkpoint/best_model
+```
+
+**Linux / macOS:**
+
+```bash
+ls segformer_melasma_checkpoint/best_model
+```
+
+Kết quả phải là `True` (hoặc liệt kê được file). Sau đó chạy:
 
 ```bash
 python scripts/08_pipeline_end_to_end.py sample_face_demo.jpg
 ```
+
+> ⚠️ **Nếu chưa có checkpoint, script 08 không báo lỗi.** Nó chỉ in dòng `Chưa tìm thấy checkpoint ...` rồi tự dùng mô hình `nvidia/segformer-b0-finetuned-ade-512-512` chưa được huấn luyện cho nám da. Pipeline vẫn chạy và sinh file kết quả, nhưng **mặt nạ phân vùng và điểm MASI không có giá trị**. Luôn kiểm tra dòng `[Model] Nạp checkpoint fine-tuned từ: ...` trong terminal để chắc chắn đang dùng mô hình đã huấn luyện.
 
 Muốn chạy trên ảnh của bạn, thay `sample_face_demo.jpg` bằng đường dẫn tới ảnh khuôn mặt (nên chụp chính diện, đủ sáng):
 
@@ -263,7 +279,7 @@ Nội dung `result.json`:
 |---|---|
 | `torch.cuda.is_available()` trả về `False` | Cập nhật driver NVIDIA, cài lại PyTorch theo bước 3 mục 5; xem thêm `setup/HUONG_DAN_CAI_DAT_GPU.md` |
 | `CUDA out of memory` khi huấn luyện | Giảm batch size trong script 05, đóng các chương trình đang dùng GPU |
-| Script 08 báo không tìm thấy checkpoint | Chưa huấn luyện xong, hãy chạy script 05 trước (mục 6, Giai đoạn C) |
+| Script 08 in `Chưa tìm thấy checkpoint ...` nhưng vẫn chạy ra kết quả | Chưa có checkpoint nên script dùng mô hình chưa huấn luyện, kết quả vô nghĩa. Chạy script 05 trước (mục 6, Giai đoạn C), rồi chạy lại script 08 |
 | PowerShell không kích hoạt được môi trường ảo | `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` |
 | File `yolov8n-face.pt` quá nhỏ (vài KB) | Tải lỗi, xóa file và tải lại theo bước 6 mục 5; trên PowerShell không dùng `curl -L` |
 | Demo không tìm thấy khuôn mặt | Dùng ảnh chính diện, đủ sáng, khuôn mặt rõ nét |
